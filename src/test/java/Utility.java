@@ -15,32 +15,61 @@ import java.util.Iterator;
 import java.util.Properties;
 
 public class Utility {
-    private static ClientApi api;
+    static ApiResponse apiResponse;
 
-    public static void activeScan(String webAppUrl, String zapAddress, int zapPort) throws ClientApiException {
-        String scanId;
-        String proxy_apiKey_zap = Utility.readProperties("proxy_apiKey_zap");
-        api = new ClientApi(zapAddress, zapPort, proxy_apiKey_zap);
-        api.pscan.setEnabled("true");
-        ApiResponse apiResponseEnable = api.ascan.enableAllScanners(null);
-        System.out.println("apiResponseEnable : " + apiResponseEnable.getName());
-        ApiResponse apiResponse = api.spider.scan(webAppUrl, null, null, null, null);
-        System.out.println("apiResponse : " + apiResponse.getName());
-        ApiResponse apiResponseActive = api.ascan.scan(webAppUrl, "True", "False", null, null, null);
-        System.out.println("apiResponseActive : " + apiResponseActive.getName());
-
-        scanId = ((ApiResponseElement)apiResponseActive).getValue();
-        ApiResponse activeScanStatus = api.ascan.status(scanId);
-        String statusAs = ((ApiResponseElement)activeScanStatus).getValue();
-        System.out.println("statusAs : " + statusAs);
+    public static void AllScan(String webAppUrl,String zapAddress, int zapPort, ClientApi api, String activeScanBool) throws ClientApiException {
+        System.out.println("Starting Spider Scan");
+        apiResponse = api.spider.scan(webAppUrl, null, null, null, null);
+        String spiderScanId = ((ApiResponseElement)apiResponse).getValue();
+        ApiResponse spiderScanStatus = api.spider.status(spiderScanId);
+        String statusAs = ((ApiResponseElement)spiderScanStatus).getValue();
         while(!statusAs.equals("100")){
-            activeScanStatus = api.ascan.status(scanId);
-            statusAs = ((ApiResponseElement)activeScanStatus).getValue();
-            System.out.println("statusAs : " + statusAs);
+            spiderScanStatus = api.spider.status(spiderScanId);
+            statusAs = ((ApiResponseElement)spiderScanStatus).getValue();
+
+        }
+        System.out.println("Spider scan completed");
+
+        waitTillPassiveScanCompleted(api);
+
+        if(activeScanBool!=null&&activeScanBool.equalsIgnoreCase("true")){
+            System.out.println("Starting Active Scan");
+            activeScan(webAppUrl, zapAddress, zapPort, api);
+            System.out.println("Active scan completed");
         }
     }
 
-    public static void getReports() throws ClientApiException {
+    public static void waitTillPassiveScanCompleted(ClientApi api) throws ClientApiException {
+        System.out.println("Starting Passive Scan");
+        ApiResponse apiResponsePs = api.pscan.recordsToScan();
+        String scanRecords = ((ApiResponseElement)apiResponsePs).getValue();
+        while(!scanRecords.equals("0")){
+            apiResponsePs = api.pscan.recordsToScan();
+            scanRecords = ((ApiResponseElement)apiResponsePs).getValue();
+        }
+        System.out.println("Passive scan completed");
+    }
+
+    public static void addUrlScanTree(String webAppUrl, ClientApi api) throws ClientApiException {
+        api.core.accessUrl(webAppUrl, "false");
+    }
+
+
+    public static void activeScan(String webAppUrl, String zapAddress, int zapPort, ClientApi api) throws ClientApiException {
+        String scanId;
+        apiResponse = api.ascan.scan(webAppUrl, "True", "False", "HighPolicy", null, null);
+        System.out.println("apiResponseActive : " + apiResponse.getName());
+
+        scanId = ((ApiResponseElement)apiResponse).getValue();
+        ApiResponse activeScanStatus = api.ascan.status(scanId);
+        String statusAs = ((ApiResponseElement)activeScanStatus).getValue();
+        while(!statusAs.equals("100")){
+            activeScanStatus = api.ascan.status(scanId);
+            statusAs = ((ApiResponseElement)activeScanStatus).getValue();
+        }
+    }
+
+    public static void getReports(ClientApi api) throws ClientApiException {
         if(api!=null){
             String title = Utility.readProperties("reportTitle");
             String description = Utility.readProperties("reportDescription");
