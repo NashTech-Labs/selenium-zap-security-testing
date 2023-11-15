@@ -7,6 +7,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.zaproxy.clientapi.core.ClientApi;
 import org.zaproxy.clientapi.core.ClientApiException;
+
+import java.io.IOException;
 import java.util.Objects;
 
 public class SeleniumZap {
@@ -33,8 +35,10 @@ public class SeleniumZap {
     }
 
     @Test
-    public void testLoginSecurity() throws ClientApiException {
-        String currentUrl = "http://localhost:3000/rest/user/login";
+    public void testLoginSecurity() throws ClientApiException, IOException {
+        String currentUrl = "https://nashtechglobal.qa.go1percent.com";
+        driver.get(currentUrl);
+        //String currentUrl = SignIn.loginToWebApp(driver);
         System.out.println("currentUrl : " + currentUrl);
         Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
     }

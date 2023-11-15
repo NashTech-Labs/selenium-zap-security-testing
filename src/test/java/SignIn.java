@@ -12,23 +12,15 @@ public class SignIn {
     public static void signInWithSavedDetails(WebDriver driver) throws IOException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         ArrayList<String> userData= Utility.getTestData("Account","Account");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("social-oidc")));
-        driver.findElement(By.id("social-oidc")).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@name='loginfmt']")));
-        WebElement loginId = driver.findElement(By.xpath("//input[@name='loginfmt']"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("username")));
+        WebElement loginId = driver.findElement(By.id("username"));
         loginId.sendKeys(userData.get(1));
-        WebElement nextBtn = driver.findElement(By.id("idSIButton9"));
-        nextBtn.click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("i0118")));
-        WebElement passwordLogin = driver.findElement(By.id("i0118"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("password")));
+        WebElement passwordLogin = driver.findElement(By.id("password"));
         passwordLogin.sendKeys(userData.get(2));
-        WebElement signIn = driver.findElement(By.id("idSIButton9"));
+        WebElement signIn = driver.findElement(By.id("kc-login"));
         signIn.click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("displayName")));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("idSIButton9")));
-        WebElement yesBtn = driver.findElement(By.id("idSIButton9"));
-        yesBtn.click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Deepansh Gupta']")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Welcome, ']")));
     }
 
     public static String loginToWebApp(WebDriver driver) throws IOException {

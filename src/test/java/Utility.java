@@ -4,15 +4,15 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.NumberToTextConverter;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.zaproxy.clientapi.core.ApiResponse;
-import org.zaproxy.clientapi.core.ApiResponseElement;
-import org.zaproxy.clientapi.core.ClientApi;
-import org.zaproxy.clientapi.core.ClientApiException;
+import org.zaproxy.clientapi.core.*;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class Utility {
     static ApiResponse apiResponse;
@@ -32,8 +32,11 @@ public class Utility {
 
         waitTillPassiveScanCompleted(api);
 
+        addUrlScanTree(webAppUrl,api);
+
         if(activeScanBool!=null&&activeScanBool.equalsIgnoreCase("true")){
             System.out.println("Starting Active Scan");
+            api.ascan.enableAllScanners(null);
             activeScan(webAppUrl, zapAddress, zapPort, api);
             System.out.println("Active scan completed");
         }
@@ -52,12 +55,21 @@ public class Utility {
 
     public static void addUrlScanTree(String webAppUrl, ClientApi api) throws ClientApiException {
         api.core.accessUrl(webAppUrl, "false");
+        if(getUrlsFromScanTree(api).contains(webAppUrl)){
+            System.out.println("Sites to test : " + getUrlsFromScanTree(api));
+        }
+    }
+
+    public static List<String>  getUrlsFromScanTree(ClientApi api) throws ClientApiException {
+        apiResponse = api.core.urls();
+        List<ApiResponse> urlList= ((ApiResponseList)apiResponse).getItems();
+        return urlList.stream().map(r -> ((ApiResponseElement)r).getValue()).collect(Collectors.toList());
     }
 
 
     public static void activeScan(String webAppUrl, String zapAddress, int zapPort, ClientApi api) throws ClientApiException {
         String scanId;
-        apiResponse = api.ascan.scan(webAppUrl, "True", "False", "HighPolicy", null, null);
+        apiResponse = api.ascan.scan(webAppUrl, "True", "False", null, null, null);
         System.out.println("apiResponseActive : " + apiResponse.getName());
 
         scanId = ((ApiResponseElement)apiResponse).getValue();
