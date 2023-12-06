@@ -81,11 +81,12 @@ public class Utility {
         }
     }
 
-    public static void getReports(ClientApi api) throws ClientApiException {
+    public static void getReports(ClientApi api, String fileName) throws ClientApiException {
         if(api!=null){
             String title = Utility.readProperties("reportTitle");
             String description = Utility.readProperties("reportDescription");
-            String reportFileName = Utility.readProperties("reportFileName");
+            String reportFileName = fileName;
+//                    Utility.readProperties("reportFileName");
             String targetFolder = System.getProperty("user.dir");
             String template = "traditional-html";
             ApiResponse response = api.reports.generate(title, template, null,
@@ -150,5 +151,18 @@ public class Utility {
             e.printStackTrace();
         }
         return null;
+    }
+    public static void cleanTheScanTree(ClientApi api) throws ClientApiException {
+        List<String> urls=getUrlsFromScanTree(api);
+        for (String url:urls){
+            if(getUrlsFromScanTree(api).stream().anyMatch(s->s.contains(url))){
+                api.core.deleteSiteNode(url,"","");
+            }
+        }
+        if(getUrlsFromScanTree(api).isEmpty())
+            System.out.println("scan tree has been cleared successfully");
+        else
+            throw new RuntimeException("scan tree was not cleared");
+
     }
 }
