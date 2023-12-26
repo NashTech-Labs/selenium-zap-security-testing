@@ -86,12 +86,11 @@ public class Utility {
             String title = Utility.readProperties("reportTitle");
             String description = Utility.readProperties("reportDescription");
             String reportFileName = fileName;
-//                    Utility.readProperties("reportFileName");
             String targetFolder = System.getProperty("user.dir");
             String template = "traditional-html";
             ApiResponse response = api.reports.generate(title, template, null,
                     description, null,
-                    null, null, null,
+                  null, null, null,
                     null, reportFileName, null,
                     targetFolder, null );
             System.out.println("ZAP report location: " + response.toString());

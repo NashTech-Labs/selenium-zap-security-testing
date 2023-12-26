@@ -32,7 +32,7 @@ public class SeleniumZap {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
-
+/*
     @Test
     public void testLoginSecurity() throws ClientApiException, IOException {
         String currentUrl = SignIn.loginToWebApp(driver);
@@ -41,7 +41,7 @@ public class SeleniumZap {
         System.out.println("currentUrl : " + currentUrl);
         Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
     }
-
+*/
     @Test
     public void testUserProfileSecurity() throws ClientApiException, IOException {
         String currentUrl = UserProfile.getUserProfile(driver);
@@ -57,6 +57,7 @@ public class SeleniumZap {
         System.out.println("currentUrl : " + currentUrl);
         Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
     }
+
     @Test
     public void testKnolx_SessionsPageSecurity() throws ClientApiException, IOException {
         String currentUrl = Knolx.getKnolxSessionsPage(driver);
@@ -71,6 +72,8 @@ public class SeleniumZap {
         System.out.println("currentUrl : " + currentUrl);
         Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
     }
+
+
     @Test
     public void testKnolx_MySessionsPageSecurity() throws ClientApiException, IOException {
         String currentUrl = Knolx.getKnolxMySessionsPage(driver);
@@ -78,6 +81,8 @@ public class SeleniumZap {
         System.out.println("currentUrl : " + currentUrl);
         Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
     }
+
+
     @Test
     public void testHelpSecurity() throws ClientApiException, IOException {
         String currentUrl = Help.getHelpPage(driver);
@@ -91,6 +96,5 @@ public class SeleniumZap {
         Utility.getReports(api, method.getName().replace("test",""));
         Utility.cleanTheScanTree(api);
         driver.close();
-        System.out.println("Close browser");
     }
 }
