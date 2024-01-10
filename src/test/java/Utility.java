@@ -81,11 +81,11 @@ public class Utility {
         }
     }
 
-    public static void getReports(ClientApi api) throws ClientApiException {
+    public static void getReports(ClientApi api, String fileName) throws ClientApiException {
         if(api!=null){
             String title = Utility.readProperties("reportTitle");
             String description = Utility.readProperties("reportDescription");
-            String reportFileName = Utility.readProperties("reportFileName");
+            String reportFileName = fileName;
             String targetFolder = System.getProperty("user.dir");
             String template = "traditional-html";
             ApiResponse response = api.reports.generate(title, template, null,
@@ -100,34 +100,35 @@ public class Utility {
     public static ArrayList<String> getTestData(String sheetName, String testCase) throws IOException {
         ArrayList<String> arrayList= new ArrayList<>();
         FileInputStream file = new FileInputStream("src/main/resources/searchKeys.xlsx");
-        XSSFWorkbook workbook = new XSSFWorkbook(file);
-        int sheetNumber=workbook.getNumberOfSheets();
-        for(int i=0;i<sheetNumber;i++){
-            if(workbook.getSheetName(i).equalsIgnoreCase(sheetName)) {
-                XSSFSheet sheet = workbook.getSheetAt(i);
-                Iterator<Row> rows=sheet.iterator();
-                Row first= rows.next();
-                Iterator<Cell> cell=first.cellIterator();
-                int r=0;
-                int c=0;
-                while (cell.hasNext()){
-                    Cell value=cell.next();
-                    if(value.getStringCellValue().equalsIgnoreCase("Test Cases")){
-                        c=r;
+        try (XSSFWorkbook workbook = new XSSFWorkbook(file)) {
+            int sheetNumber=workbook.getNumberOfSheets();
+            for(int i=0;i<sheetNumber;i++){
+                if(workbook.getSheetName(i).equalsIgnoreCase(sheetName)) {
+                    XSSFSheet sheet = workbook.getSheetAt(i);
+                    Iterator<Row> rows=sheet.iterator();
+                    Row first= rows.next();
+                    Iterator<Cell> cell=first.cellIterator();
+                    int r=0;
+                    int c=0;
+                    while (cell.hasNext()){
+                        Cell value=cell.next();
+                        if(value.getStringCellValue().equalsIgnoreCase("Test Cases")){
+                            c=r;
+                        }
+                        r++;
                     }
-                    r++;
-                }
-                while (rows.hasNext()){
-                    Row r2=rows.next();
-                    if(r2.getCell(c).getStringCellValue().equalsIgnoreCase(testCase)){
-                        Iterator<Cell> cv=r2.cellIterator();
-                        while (cv.hasNext()){
-                            Cell cell2= cv.next();
-                            if(cell2.getCellType()== CellType.STRING){
-                                arrayList.add(cell2.getStringCellValue());
-                            }
-                            else {
-                                arrayList.add(NumberToTextConverter.toText(cell2.getNumericCellValue()));
+                    while (rows.hasNext()){
+                        Row r2=rows.next();
+                        if(r2.getCell(c).getStringCellValue().equalsIgnoreCase(testCase)){
+                            Iterator<Cell> cv=r2.cellIterator();
+                            while (cv.hasNext()){
+                                Cell cell2= cv.next();
+                                if(cell2.getCellType()== CellType.STRING){
+                                    arrayList.add(cell2.getStringCellValue());
+                                }
+                                else {
+                                    arrayList.add(NumberToTextConverter.toText(cell2.getNumericCellValue()));
+                                }
                             }
                         }
                     }
@@ -150,5 +151,19 @@ public class Utility {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void cleanTheScanTree(ClientApi api) throws ClientApiException {
+        List<String> urls=getUrlsFromScanTree(api);
+        for (String url:urls){
+            if(getUrlsFromScanTree(api).stream().anyMatch(s->s.contains(url))){
+                api.core.deleteSiteNode(url,"","");
+            }
+        }
+        if(getUrlsFromScanTree(api).isEmpty())
+            System.out.println("scan tree has been cleared successfully");
+        else
+            throw new RuntimeException("scan tree was not cleared");
+
     }
 }
