@@ -90,7 +90,7 @@ public class Utility {
             String template = "traditional-html";
             ApiResponse response = api.reports.generate(title, template, null,
                     description, null,
-                    null, null, null,
+                  null, null, null,
                     null, reportFileName, null,
                     targetFolder, null );
             System.out.println("ZAP report location: " + response.toString());
