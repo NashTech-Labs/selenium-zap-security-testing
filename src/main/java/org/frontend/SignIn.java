@@ -1,3 +1,5 @@
+package org.frontend;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;

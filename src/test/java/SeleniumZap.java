@@ -1,4 +1,6 @@
 import io.github.cdimascio.dotenv.Dotenv;
+import org.frontend.SignIn;
+import org.frontend.Utility;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -36,7 +38,7 @@ public class SeleniumZap {
     }
 
     @Test
-    public void testLoginSecurity() throws ClientApiException, IOException {
+    public void testLoginSecurity() throws ClientApiException {
         String currentUrl = SignIn.loginToWebApp(driver);
         System.out.println("currentUrl : " + currentUrl);
         Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, dotenv.get("ActiveScan"));
