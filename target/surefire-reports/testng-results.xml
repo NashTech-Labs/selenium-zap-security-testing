@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2023-05-06T05:29:03Z" name="Suite1" finished-at="2023-05-06T05:31:11Z" duration-ms="128743">
+    <groups>
+    </groups>
+    <test started-at="2023-05-06T05:29:03Z" name="Regression" finished-at="2023-05-06T05:31:11Z" duration-ms="128743">
+      <class name="org.example.ZapTest">
+        <test-method signature="demoTest()[pri:0, instance:org.example.ZapTest@227a933d]" started-at="2023-05-06T10:59:03Z" name="demoTest" finished-at="2023-05-06T11:01:11Z" duration-ms="128356" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- demoTest -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:org.example.ZapTest@227a933d]" started-at="2023-05-06T11:01:11Z" name="tearDown" finished-at="2023-05-06T11:01:11Z" duration-ms="298" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- org.example.ZapTest -->
+    </test> <!-- Regression -->
+  </suite> <!-- Suite1 -->
+</testng-results>
