@@ -5,9 +5,9 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.testng.annotations.*;
 import org.zaproxy.clientapi.core.ClientApi;
 import org.zaproxy.clientapi.core.ClientApiException;
+import java.lang.reflect.Method;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.Objects;
 
 public class SeleniumZap {
@@ -18,7 +18,7 @@ public class SeleniumZap {
     static String proxy_apiKey_zap = Utility.readProperties("proxy_apiKey_zap");
 
     @BeforeMethod
-    public void startUp() {
+    public void startUp(){
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--ignore-certificate-errors");
         assert proxy_address_zap != null;
@@ -32,61 +32,12 @@ public class SeleniumZap {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
-/*
+
     @Test
     public void testLoginSecurity() throws ClientApiException, IOException {
-        String currentUrl = SignIn.loginToWebApp(driver);
+        String currentUrl = "https://nashtechglobal.qa.go1percent.com";
         driver.get(currentUrl);
-        //        String currentUrl = "https://nashtechglobal.qa.go1percent.com";
-        System.out.println("currentUrl : " + currentUrl);
-        Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
-    }
-*/
-    @Test
-    public void testUserProfileSecurity() throws ClientApiException, IOException {
-        String currentUrl = UserProfile.getUserProfile(driver);
-        driver.get(currentUrl);
-        System.out.println("currentUrl : " + currentUrl);
-        Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
-    }
-
-    @Test
-    public void testKnolx_ReportsPageSecurity() throws ClientApiException, IOException {
-        String currentUrl = Knolx.getKnolxReportsPage(driver);
-        driver.get(currentUrl);
-        System.out.println("currentUrl : " + currentUrl);
-        Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
-    }
-
-    @Test
-    public void testKnolx_SessionsPageSecurity() throws ClientApiException, IOException {
-        String currentUrl = Knolx.getKnolxSessionsPage(driver);
-        driver.get(currentUrl);
-        System.out.println("currentUrl : " + currentUrl);
-        Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
-    }
-    @Test
-    public void testKnolx_BookASessionsPageSecurity() throws ClientApiException, IOException {
-        String currentUrl = Knolx.getKnolxBookASessionPage(driver);
-        driver.get(currentUrl);
-        System.out.println("currentUrl : " + currentUrl);
-        Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
-    }
-
-
-    @Test
-    public void testKnolx_MySessionsPageSecurity() throws ClientApiException, IOException {
-        String currentUrl = Knolx.getKnolxMySessionsPage(driver);
-        driver.get(currentUrl);
-        System.out.println("currentUrl : " + currentUrl);
-        Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
-    }
-
-
-    @Test
-    public void testHelpSecurity() throws ClientApiException, IOException {
-        String currentUrl = Help.getHelpPage(driver);
-        driver.get(currentUrl);
+        //String currentUrl = SignIn.loginToWebApp(driver);
         System.out.println("currentUrl : " + currentUrl);
         Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
     }
@@ -96,5 +47,6 @@ public class SeleniumZap {
         Utility.getReports(api, method.getName().replace("test",""));
         Utility.cleanTheScanTree(api);
         driver.close();
+        System.out.println("Close browser");
     }
 }
