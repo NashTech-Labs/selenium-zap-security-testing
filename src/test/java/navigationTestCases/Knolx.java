@@ -1,3 +1,5 @@
+package navigationTestCases;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,13 +11,10 @@ import java.time.Duration;
 
 public class Knolx {
     public static void knolxPage(WebDriver driver) throws IOException{
-        String appUrl = Utility.readProperties("appUrl");;
-        driver.get(appUrl);
-        SignIn.signInWithSavedDetails(driver);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         // Click on knolx tab
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@role='button']/h6[contains(text(),'Knolx')]")));
-        WebElement knolxBtn = driver.findElement(By.xpath("//*[@role='button']/h6[contains(text(),'Knolx')]"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@role='button']/h6[contains(text(),'navigationTestCases.Knolx')]")));
+        WebElement knolxBtn = driver.findElement(By.xpath("//*[@role='button']/h6[contains(text(),'navigationTestCases.Knolx')]"));
         knolxBtn.click();
         System.out.println("click on knolx button");
     }

@@ -3,7 +3,7 @@
 <suite name="Suite1" verbose="1" >
     <test name="Regression">
         <classes>
-            <class name="org.example.ZapTest"/>
+            <class name="org.api.ZapTest"/>
         </classes>
     </test>
 </suite>

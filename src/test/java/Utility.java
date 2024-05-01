@@ -1,3 +1,4 @@
+import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 public class Utility {
     static ApiResponse apiResponse;
+    static Dotenv dotenv = Dotenv.load();
 
     public static void AllScan(String webAppUrl,String zapAddress, int zapPort, ClientApi api, String activeScanBool) throws ClientApiException {
         System.out.println("Starting Spider Scan");
@@ -83,23 +85,22 @@ public class Utility {
 
     public static void getReports(ClientApi api, String fileName) throws ClientApiException {
         if(api!=null){
-            String title = Utility.readProperties("reportTitle");
-            String description = Utility.readProperties("reportDescription");
-            String reportFileName = fileName;
+            String title = dotenv.get("reportTitleFrontend");
+            String description = dotenv.get("reportDescriptionFrontend");
             String targetFolder = System.getProperty("user.dir");
             String template = "traditional-html";
             ApiResponse response = api.reports.generate(title, template, null,
                     description, null,
                   null, null, null,
-                    null, reportFileName, null,
+                    null, fileName, null,
                     targetFolder, null );
             System.out.println("ZAP report location: " + response.toString());
         }
     }
 
-    public static ArrayList<String> getTestData(String sheetName, String testCase) throws IOException {
+    public static ArrayList<String> getTestData(String sheetName, String testCase, String filePath) throws IOException {
         ArrayList<String> arrayList= new ArrayList<>();
-        FileInputStream file = new FileInputStream("src/main/resources/searchKeys.xlsx");
+        FileInputStream file = new FileInputStream(filePath);
         try (XSSFWorkbook workbook = new XSSFWorkbook(file)) {
             int sheetNumber=workbook.getNumberOfSheets();
             for(int i=0;i<sheetNumber;i++){
@@ -139,11 +140,11 @@ public class Utility {
     }
 
 
-    public static String readProperties(String propertyName)  {
+    public static String readProperties(String propertyName, String filePath)  {
         try{
             Properties properties = new Properties();
             FileInputStream input;
-            input = new FileInputStream("application.properties");
+            input = new FileInputStream(filePath);
             properties.load(input);
             return properties.getProperty(propertyName).trim();
         }
