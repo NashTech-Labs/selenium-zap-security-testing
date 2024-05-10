@@ -9,8 +9,6 @@ import org.testng.annotations.*;
 import org.zaproxy.clientapi.core.ClientApi;
 import org.zaproxy.clientapi.core.ClientApiException;
 import java.lang.reflect.Method;
-
-import java.io.IOException;
 import java.util.Objects;
 
 public class SeleniumZap {
