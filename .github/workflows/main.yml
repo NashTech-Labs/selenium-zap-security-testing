@@ -27,6 +27,7 @@ jobs:
         sudo snap install zaproxy --classic
         ZAP_API_KEY=fird1714cemk320pcfga1oun5e
         echo "ZAP API Key: $ZAP_API_KEY"
+        ls
         zap.sh -daemon -config api.key=$ZAP_API_KEY
 
     - name: Run TestNG test
