@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudp snap install zaproxy
+        sudo snap install zaproxy
         ZAP_API_KEY=fird1714cemk320pcfga1oun5e
         echo "ZAP API Key: $ZAP_API_KEY"
         zap.sh -daemon -config api.key=$ZAP_API_KEY
