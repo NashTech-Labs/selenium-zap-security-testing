@@ -1,0 +1,40 @@
+name: Selenium with ZAP Security Testing
+
+on:
+  push:
+    branches:
+      - main  # Change to your main branch name
+  pull_request:
+    branches:
+      - main  # Change to your main branch name
+  workflow_dispatch:  # Manually trigger the workflow
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y owasp-zap
+        ZAP_API_KEY=fird1714cemk320pcfga1oun5e
+        echo "ZAP API Key: $ZAP_API_KEY"
+        zap.sh -daemon -config api.key=$ZAP_API_KEY
+
+    - name: Run TestNG test
+      run: mvn test -Dtest=SeleniumZap.java
+
+    - name: Upload Reports
+      uses: actions/upload-artifact@v2
+      with:
+        name: zap-reports
+        path: /*.html
