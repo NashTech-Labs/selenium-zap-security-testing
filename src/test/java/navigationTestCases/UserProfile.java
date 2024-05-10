@@ -1,3 +1,5 @@
+package navigationTestCases;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,10 +19,7 @@ public class UserProfile {
         profile.click();
     }
 
-    public static String getUserProfile(WebDriver driver) throws IOException {
-        String appUrl = Utility.readProperties("appUrl");;
-        driver.get(appUrl);
-        SignIn.signInWithSavedDetails(driver);
+    public static String getUserProfile(WebDriver driver) {
         UserProfile.userProfilePage(driver);
         return driver.getCurrentUrl();
     }

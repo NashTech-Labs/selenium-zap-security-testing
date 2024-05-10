@@ -1,10 +1,10 @@
-package org.example;
+package org.api;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-import static org.example.ZapUtil.*;
+import static org.api.ZapUtil.*;
 public class ZapTest {
 
     static String urlToTest;

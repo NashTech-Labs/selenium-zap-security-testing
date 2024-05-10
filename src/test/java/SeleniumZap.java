@@ -1,3 +1,6 @@
+import io.github.cdimascio.dotenv.Dotenv;
+import org.frontend.SignIn;
+import org.frontend.Utility;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -6,16 +9,15 @@ import org.testng.annotations.*;
 import org.zaproxy.clientapi.core.ClientApi;
 import org.zaproxy.clientapi.core.ClientApiException;
 import java.lang.reflect.Method;
-
-import java.io.IOException;
 import java.util.Objects;
 
 public class SeleniumZap {
-    static final String proxy_address_zap = Utility.readProperties("proxy_address_zap");
-    static final int proxy_port_zap = Integer.parseInt(Objects.requireNonNull(Utility.readProperties("proxy_port_zap")));
+    static Dotenv dotenv = Dotenv.load();
+    static final String proxy_address_zap = dotenv.get("proxy_address_zap");
+    static final int proxy_port_zap = Integer.parseInt(Objects.requireNonNull(dotenv.get("proxy_port_zap")));
     static WebDriver driver;
     private static ClientApi api;
-    static String proxy_apiKey_zap = Utility.readProperties("proxy_apiKey_zap");
+    static String proxy_apiKey_zap = dotenv.get("proxy_apiKey_zap");
 
     @BeforeMethod
     public void startUp(){
@@ -34,19 +36,17 @@ public class SeleniumZap {
     }
 
     @Test
-    public void testLoginSecurity() throws ClientApiException, IOException {
-        String currentUrl = "https://nashtechglobal.qa.go1percent.com";
-        driver.get(currentUrl);
-        //String currentUrl = SignIn.loginToWebApp(driver);
+    public void testLoginSecurity() throws ClientApiException {
+        String currentUrl = SignIn.loginToWebApp(driver);
         System.out.println("currentUrl : " + currentUrl);
-        Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, Utility.readProperties("ActiveScan"));
+        Utility.AllScan(currentUrl, proxy_address_zap, proxy_port_zap, api, dotenv.get("ActiveScan"));
     }
 
     @AfterMethod
     public void tearDown(Method method) throws ClientApiException {
         Utility.getReports(api, method.getName().replace("test",""));
         Utility.cleanTheScanTree(api);
-        driver.close();
+        driver.quit();
         System.out.println("Close browser");
     }
 }

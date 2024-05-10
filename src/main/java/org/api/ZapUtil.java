@@ -1,4 +1,4 @@
-package org.example;
+package org.api;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import io.restassured.RestAssured;
@@ -78,7 +78,6 @@ public class ZapUtil {
             String title = dotenv.get("reportTitle");
             String template = "traditional-html";
             String description = dotenv.get("reportDescription");
-            String sites = site_to_test;
             String reportfilename = dotenv.get("reportFileName");
             String reportdir = System.getProperty("user.dir");
 
@@ -86,7 +85,7 @@ public class ZapUtil {
             queryParams.put("title", title);
             queryParams.put("template", template);
             queryParams.put("description", description);
-            queryParams.put("sites", sites);
+            queryParams.put("sites", site_to_test);
             queryParams.put("reportFileName", reportfilename);
             queryParams.put("reportDir", reportdir);
 

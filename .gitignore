@@ -2,5 +2,4 @@
 /shelf/
 /.idea/
 /target
-src/main/resources/searchKeys.xlsx
-.env
+*.html
