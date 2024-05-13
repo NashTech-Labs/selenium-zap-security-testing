@@ -37,4 +37,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: zap-reports
-        path: /*.html
+        path: /home/zap/go-1%-dashboard.html
