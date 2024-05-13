@@ -23,6 +23,8 @@ public class SeleniumZap {
     public void startUp(){
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--ignore-certificate-errors");
+        options.addArguments("--headless=new");
+        driver = new ChromeDriver(options);
         assert proxy_address_zap != null;
         api = new ClientApi(proxy_address_zap, proxy_port_zap, proxy_apiKey_zap);
         String proxyUrl = proxy_address_zap + ":" + proxy_port_zap;
@@ -31,7 +33,6 @@ public class SeleniumZap {
         proxyServer.setHttpProxy(proxyUrl)
                 .setSslProxy(proxyUrl);
         options.setCapability(CapabilityType.PROXY, proxyServer);
-        driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
