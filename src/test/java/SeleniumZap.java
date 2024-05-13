@@ -44,7 +44,7 @@ public class SeleniumZap {
 
     @AfterMethod
     public void tearDown(Method method) throws ClientApiException {
-        Utility.getReports(api, method.getName().replace("test",""));
+        Utility.getReports(api, dotenv.get("reportFileNameFrontend"));
         Utility.cleanTheScanTree(api);
         driver.quit();
         System.out.println("Close browser");

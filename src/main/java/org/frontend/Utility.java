@@ -89,13 +89,12 @@ public class Utility {
         if(api!=null){
             String title = dotenv.get("reportTitleFrontend");
             String description = dotenv.get("reportDescriptionFrontend");
-            String targetFolder = System.getProperty("user.dir");
             String template = "traditional-html";
             ApiResponse response = api.reports.generate(title, template, null,
                     description, null,
                   null, null, null,
                     null, fileName, null,
-                    targetFolder, null );
+                    null, null );
             System.out.println("ZAP report location: " + response.toString());
         }
     }
