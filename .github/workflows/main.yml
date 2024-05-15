@@ -25,13 +25,6 @@ jobs:
 #      run: |
 #        sudo apt-get update
 #        docker pull zaproxy/zap-bare
-    - name: Build custom Zap image with Maven
-      run: |
-          cat <<EOF > Dockerfile
-          FROM zaproxy/zap-stable
-          RUN sudo apt-get update && apt-get install -y maven
-          EOF
-          docker build -t custom-zap-image .
         
     - name: Run OWASP ZAP Docker container
       run: |
@@ -39,7 +32,7 @@ jobs:
       
     - name: Run TestNG test
       run: |
-        docker exec -w /zap/wrk zap mvn test -Dtest=SeleniumZap.java
+        mvn test -Dtest=SeleniumZap.java
 
     - name: Upload Reports
       uses: actions/upload-artifact@v2
