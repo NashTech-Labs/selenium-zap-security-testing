@@ -21,10 +21,17 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Install OWASP Zap
+#    - name: Install OWASP Zap
+#      run: |
+#        sudo apt-get update
+#        docker pull zaproxy/zap-bare
+    - name: Build custom Zap image with Maven
       run: |
-        sudo apt-get update
-        docker pull zaproxy/zap-bare
+          cat <<EOF > Dockerfile
+          FROM zaproxy/zap-stable
+          RUN apt-get update && apt-get install -y maven
+          EOF
+          docker build -t custom-zap-image .
         
     - name: Run OWASP ZAP Docker container
       run: |
