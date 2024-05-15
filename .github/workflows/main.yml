@@ -28,15 +28,14 @@ jobs:
         
     - name: Run OWASP ZAP Docker container
       run: |
-        docker run -d -u zap -p 8080:8080 -i zaproxy/zap-bare zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config api.key=fird1714cemk320pcfga1oun5e
+        docker run -v $(pwd):/zap/wrk/:rw -u zap -p 8080:8080 -i zaproxy/zap-stable zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config api.key=fird1714cemk320pcfga1oun5e
       
     - name: Run TestNG test
       run: |
         mvn test -Dtest=SeleniumZap.java
-        mv /home/zap/go-1%-dashboard.html $GITHUB_WORKSPACE/report.html
 
     - name: Upload Reports
       uses: actions/upload-artifact@v2
       with:
         name: zap-reports
-        path: $GITHUB_WORKSPACE/report.html
+        path: /zap/wrk/go-1%-dashboard.html
