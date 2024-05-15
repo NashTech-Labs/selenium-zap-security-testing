@@ -26,15 +26,13 @@ jobs:
         sudo apt-get update
         docker pull zaproxy/zap-bare
         
-    - name: Run OWASP ZAP Docker container
+    - name: Run OWASP ZAP Docker container and Selenium Test
       run: |
         docker run -d --name zap -v ${{ github.workspace }}:/zap/wrk/:rw -u zap -p 8080:8080 -i zaproxy/zap-bare zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config api.key=fird1714cemk320pcfga1oun5e
         chmod -R 777 "${{ github.workspace }}"
         mvn test -Dtest=SeleniumZap.java
+        docker cp zap:/zap/wrk/go-1%-dashboard.html /home/runner/work/selenium-zap-security-testing/selenium-zap-security-testing
       
-#    - name: Run TestNG test
-#      run: |
-#
 
     - name: Upload Reports
       uses: actions/upload-artifact@v2
