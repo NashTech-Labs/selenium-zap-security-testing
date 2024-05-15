@@ -31,11 +31,12 @@ jobs:
         docker run -d --name zap -v ${{ github.workspace }}:/zap/wrk/:rw -u zap -p 8080:8080 -i zaproxy/zap-bare zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config api.key=fird1714cemk320pcfga1oun5e
         chmod -R 777 "${{ github.workspace }}"
         mvn test -Dtest=SeleniumZap.java
-        docker cp zap:/zap/wrk/go-1%-dashboard.html /home/runner/work/selenium-zap-security-testing/selenium-zap-security-testing
+        docker cp zap:/zap/wrk/go-1%-dashboard.html ${{ github.workspace }}
+        ls
       
 
     - name: Upload Reports
       uses: actions/upload-artifact@v2
       with:
         name: zap-reports
-        path: ${{ github.workspace }}/zap/wrk/go-1%-dashboard.html
+        path: ${{ github.workspace }}/go-1%-dashboard.html
