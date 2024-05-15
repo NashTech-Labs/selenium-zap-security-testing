@@ -40,4 +40,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: zap-reports
-        path: /zap/wrk/go-1%-dashboard.html
+        path: ${{ github.workspace }}/zap/wrk/go-1%-dashboard.html
