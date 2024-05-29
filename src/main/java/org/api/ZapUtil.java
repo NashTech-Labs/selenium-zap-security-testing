@@ -33,19 +33,27 @@ public class ZapUtil {
         }
 
 
-        public static void waitForPassiveScanCompletion () {
+    public static void waitForPassiveScanCompletion() {
+        try {
             response = requestSpecification.get("/pscan/view/recordsToScan/");
-            String records = response.jsonPath().get("recordsToScan");
-
-            while (!records.equals("0")) {
-                System.out.println("under passive scanning");
-                response = requestSpecification.get("/pscan/view/recordsToScan/");
-                records = response.jsonPath().get("recordsToScan");
+            if (response.getStatusCode() == 200) {
+                String records = response.jsonPath().getString("recordsToScan");
+                while (!records.equals("0")) {
+                    System.out.println("Under passive scanning");
+                    response = requestSpecification.get("/pscan/view/recordsToScan/");
+                    records = response.jsonPath().getString("recordsToScan");
+                }
+                System.out.println("Passive scan is completed");
+            } else {
+                System.out.println("Error: Failed to get passive scan records. Status code: " + response.getStatusCode());
             }
-            System.out.println("passive scan is completed");
+        } catch (Exception e) {
+            System.out.println("Error occurred while waiting for passive scan completion: " + e.getMessage());
         }
+    }
 
-        public static void addURLToScanTree (String site_to_test){
+
+    public static void addURLToScanTree (String site_to_test){
             requestSpecification.queryParam("url", site_to_test);
 
             response = requestSpecification.get("/core/action/accessUrl/");
@@ -61,20 +69,28 @@ public class ZapUtil {
                 System.out.println("active scan has started");
         }
 
-        public static void waitForActiveScanCompletion () {
+    public static void waitForActiveScanCompletion() {
+        try {
             response = requestSpecification.get("/ascan/view/status/");
-            String status = response.jsonPath().get("status");
-
-            while (!status.equals("100")) {
-                System.out.println("active scan is in progress");
-                response = requestSpecification.get("/ascan/view/status/");
-                status = response.jsonPath().get("status");
+            if (response.getStatusCode() == 200) {
+                String status = response.jsonPath().getString("status");
+                while (!status.equals("100")) {
+                    System.out.println("active scan is in progress");
+                    response = requestSpecification.get("/ascan/view/status/");
+                    status = response.jsonPath().getString("status");
+                }
+                System.out.println("active scan has completed");
+            } else {
+                System.out.println("Error: Failed to get active scan status. Status code: " + response.getStatusCode());
             }
-            System.out.println("active scan has completed");
+        } catch (Exception e) {
+            System.out.println("Error occurred while waiting for active scan completion: " + e.getMessage());
         }
+    }
 
 
-        public static void createReport (String site_to_test){
+
+    public static void createReport (String site_to_test){
             String title = dotenv.get("reportTitle");
             String template = "traditional-html";
             String description = dotenv.get("reportDescription");
